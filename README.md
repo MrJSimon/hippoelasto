@@ -82,8 +82,11 @@ symbolic_namin_list = ['dWdI1','dWdI2']
 ```
 Note: support for selecting built-in models (e.g., Neo-Hookean, Mooney-Rivlin, Ogden) is planned.
 
-🔧 **Steps 3–7: Optimization, VUMAT generation, and plotting**
+### 🔧 **Steps 3–7: Optimization, VUMAT generation, and plotting**
 
 To see the full calibration pipeline and how to generate a VUMAT from your model:
 
 ➡️ [See full workflow in `docs/quickstart.md`](docs/quickstart.md)
+
+# Visualizations
+
