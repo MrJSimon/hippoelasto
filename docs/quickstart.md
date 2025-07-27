@@ -2,8 +2,6 @@
 
 This guide walks you through the full workflow in **hippoelasto**, from defining a custom hyperelastic model to exporting a VUMAT file for use in Abaqus.
 
----
-
 ## 🔧 Step 3: Compute Symbolic Quantities
 
 We start by computing the symbolic stress and energy terms needed for calibration and VUMAT generation.
