@@ -90,3 +90,7 @@ To see the full calibration pipeline and how to generate a VUMAT from your model
 
 # Visualizations
 
+**Prediction vs. Data**: Visualization of prediction vs. data in terms of nominal stress and strain,
+<p align="center">
+  <img src="./docs/images/predictionvsdata.pdf" alt="Nnominal stress/strain data and prediction" width="70%">
+</p>
