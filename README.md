@@ -40,10 +40,6 @@ The data file must be comma-separated and contain the following columns:
 | 0.011          | 4.109         |
 | 0.022          | 6.654         |
 | ⋮              | ⋮              |
-| 0.033          | 8.379         |
-| 0.044          | 9.44          |
-| 0.055          | 9.977         |
-| ⋮              | ⋮              |
 | 0.066          | 10.246        |
 | 0.077          | 10.483        |
 | 0.088          | 10.643        |
@@ -51,47 +47,37 @@ The data file must be comma-separated and contain the following columns:
 
 Place your tensile data file (e.g., yourfile.txt) in the data/ folder of the repository.
 
-⚙️ Step 2: Choose Material Model
+```python
+## Load in data
+data = np.loadtxt('data\\nominal_stress_strain_data.txt',delimiter=',')
+
+## Set strain- and stress data
+eps_n, sig_n = data[:,0], data[:,1]
+```
+
+### ⚙️ Step 2: Choose Material Model
 Specify custom hyperlastic model (e.g., Neo-Hookean, Mooney-Rivlin, Ogden) in terms of strain energy potential
 
+```python
+## Define symbolic variables
+C10, C01, C20 = sp.symbols('C10 C01 C20')
 
+## Define placeholders for modified invariants
+I1b, I2b, J_sym = sp.symbols('I1b I2b J')
 
-TBD: Select from built-in hyperelastic models (e.g., Neo-Hookean, Mooney-Rivlin, Ogden).
+## Define stretches uniaxial state
+lambda_11, lambda_22, lambda_33 = sp.symbols('lambda_11 lambda_22 lambda_33', positive=True)
 
-You can also specify custom strain energy functions.
+## Define strain energy function
+W = C10 * (I1b - 3) + C01 * (I2b - 3) + C20 * (I1b - 3)**2
 
+## Create combined list for symbolic deriviation
+symbolic_combi_list = (lambda_11,lambda_22,lambda_33,
+                       C10, C01, C20)
 
-
-
-### 🔖 Step 2: Label Manager
-Use the plus/+ or minus/- sign to add or remove labels. The program currently supports 9 labels.
-
-### 🎨 Step 3: Paint tools
-To mask an image start by:
-
-&nbsp;&nbsp;&nbsp;&nbsp; **3.1** Activate the label of interest by pressing the added label-button  
-&nbsp;&nbsp;&nbsp;&nbsp; **3.2** Press the brush tool button  
-&nbsp;&nbsp;&nbsp;&nbsp; **3.3** Guide the mouse to the main image window and paint on top of the image 
-
-Please note that the brush and eraser tool will only work on the image, not on the entire canvas.
-
-### 📊 Step 3: Select Features
-In the **Random Forest Classifier** panel, choose the features to include in training (e.g., Sobel, Canny Edge, Gaussian filters).
-
-### 🌲 Step 4: Random Forest Classifier
-Click **Train** to build a Random Forest model using the selected features and masks.
-
-### 🔮 Step 5: Predict Segmentation
-Use the **Predict** button to apply the trained model to the image shown in the main GUI window. 
-
-Predictions will appear in a **separate** window next to the original image.
-
-### 🤖 Step 5: Automation Manager
-To apply the trained model to multiple images:
-
-&nbsp;&nbsp;&nbsp;&nbsp; 5.1 Use the **Automation Manager** to select or deselect the images to be predicted  
-&nbsp;&nbsp;&nbsp;&nbsp; 5.2 Press the **Predict** button to apply the trained model to the selected images  
-&nbsp;&nbsp;&nbsp;&nbsp; 5.3 Lean back and relax while **asm** processes the batch
-
-### 📝 Step 6: Save Results
-Click the **save json** button to save the current session information in a 'config.json' file. The file contains all necessary metadata to restore the session later.
+## Create symbolic list for the VUMAT.f file
+symbolic_param_list = [C10,C01,C20]
+symbolic_deriv_list = [sp.diff(W, I1b), sp.diff(W, I2b)]
+symbolic_namin_list = ['dWdI1','dWdI2']
+```
+Note: support for selecting built-in models (e.g., Neo-Hookean, Mooney-Rivlin, Ogden) is planned.
