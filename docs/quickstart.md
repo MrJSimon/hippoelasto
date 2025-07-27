@@ -2,6 +2,56 @@
 
 This guide walks you through the full workflow in **hippoelasto**, from defining a custom hyperelastic model to exporting a VUMAT file for use in Abaqus.
 
+## 📂 Step 1: Load data
+The data file must be comma-separated and contain the following columns:
+
+| strain [-] | stress [MPa] |
+|---------------:|--------------:|
+| 0.0          | 0.069           |
+| 0.011          | 4.109         |
+| 0.022          | 6.654         |
+| ⋮              | ⋮              |
+| 0.066          | 10.246        |
+| 0.077          | 10.483        |
+| 0.088          | 10.643        |
+| ⋮              | ⋮              |
+
+Place your tensile data file (e.g., yourfile.txt) in the data/ folder of the repository.
+
+```python
+# Load in data
+data = np.loadtxt('data\\nominal_stress_strain_data.txt',delimiter=',')
+
+# Set strain- and stress data
+eps_n, sig_n = data[:,0], data[:,1]
+```
+
+## ⚙️ Step 2: Choose Material Model
+**Specify a custom hyperelastic model** (e.g., Neo-Hookean, Mooney-Rivlin, Ogden) in terms of strain energy potential
+
+```python
+# Define symbolic variables
+C10, C01, C20 = sp.symbols('C10 C01 C20')
+
+# Define placeholders for modified invariants
+I1b, I2b, J_sym = sp.symbols('I1b I2b J')
+
+# Define stretches uniaxial state
+lambda_11, lambda_22, lambda_33 = sp.symbols('lambda_11 lambda_22 lambda_33', positive=True)
+
+# Define strain energy function
+W = C10 * (I1b - 3) + C01 * (I2b - 3) + C20 * (I1b - 3)**2
+
+# Create combined list for symbolic derivation
+symbolic_combi_list = (lambda_11,lambda_22,lambda_33,
+                       C10, C01, C20)
+
+# Create symbolic list for the VUMAT.f file
+symbolic_param_list = [C10,C01,C20]
+symbolic_deriv_list = [sp.diff(W, I1b), sp.diff(W, I2b)]
+symbolic_namin_list = ['dWdI1','dWdI2']
+```
+
 ## 🔧 Step 3: Compute Symbolic Quantities
 
 We start by computing the symbolic stress and energy terms needed for calibration and VUMAT generation.
