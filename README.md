@@ -92,5 +92,15 @@ To see the full calibration pipeline and how to generate a VUMAT from your model
 
 **Prediction vs. Data**: Visualization of prediction vs. data in terms of nominal stress and strain,
 <p align="center">
-  <img src="./docs/images/predictionvsdata.png" alt="Nnominal stress/strain data and prediction" width="70%">
+  <img src="./docs/images/predictionvsdata.png" alt="Nnominal stress/strain data and prediction" width="50%">
 </p>
+
+# Output Files
+
+| File Name                                       | Description                                |
+|-------------------------------------------------|--------------------------------------------|
+| VUMAT_2D_planestrain_incompressible_modified.f  | User Material subroutine                   |
+| PredictionVsData.png                            | Fitted prediction                          |
+
+# Documentation
+For more details, visit the [Wiki](https://github.com/MrJSimon/hippoelasto/wiki).
