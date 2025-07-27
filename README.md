@@ -2,7 +2,7 @@
 **hippoelasto** is a Python package for hyperelastic material characterization and calibration, and VUMAT generation for finite element modeling in Abaqus.
 
 ## Purpose  
-**hippoelasto** is built for researchers and engineers working with soft material modeling and simulation. It provides a full pipeline—from experimental data fitting to VUMAT generation—for hyperelastic material models.
+**hippoelasto** is built for researchers and engineers working with soft material modeling and simulation. It provides a full pipeline from experimental data fitting to VUMAT generation for hyperelastic material models.
 
 1. Load and manage experimental stress-strain data 
 1. Select and configure hyperelastic material models 
