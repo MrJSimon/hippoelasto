@@ -62,4 +62,4 @@ def OptimizationSLSQP(ObjectiveFunction, coefs, args, constraints = False,
                         options=options)
     
     ## Return fitting parameters
-    return solution.x, objective_history, param_history
+    return solution.x, objective_history, np.array(param_history)
