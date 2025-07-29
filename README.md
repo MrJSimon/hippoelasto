@@ -99,6 +99,16 @@ To see the full calibration pipeline and how to generate a VUMAT from your model
   <img src="./docs/images/predictionvsdata.png" alt="Nominal stress/strain data and prediction" width="50%">
 </p>
 
+**Tangent moduli**: Visualization of tangent moduli and elastic initial modulus.
+<p align="center">
+  <img src="./docs/images/tangentmodulus.png" alt="Tangent modulus vs. strain" width="50%">
+</p>
+
+**Optimization history**: Visualization of objective function and material parameres during optimization.
+<p align="center">
+  <img src="./docs/images/optimizationhistory.png" alt="Optimization history vs. iterations" width="80%">
+</p>
+
 # Output Files
 
 | File Name                                       | Description                                |
