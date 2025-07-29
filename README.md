@@ -113,8 +113,23 @@ To see the full calibration pipeline and how to generate a VUMAT from your model
 
 | File Name                                       | Description                                |
 |-------------------------------------------------|--------------------------------------------|
-| VUMAT_2D_planestrain_modified.f  | User Material subroutine                   |
-| PredictionVsData.png                            | Fitted prediction                          |
+| VUMAT_2D_planestrain_modified.f                 | User Material subroutine                   |
+| predictionvsdata.pdf                            | Fitted prediction                          |
+| tangentmodulus.pdf                              | Tangent and elastic modulus                |
+| optimizationhistory.pdf                         | Objective and material parameters history  |
+| model_parameters.pdf                            | Model parameters after optimization        |
+
+### Example of model parameters
+| Parameter | Value               |
+|----------|---------------------|
+| C10      | -1315.3536784566452 |
+| C01      | 1420.8107300207246  |
+| C20      | 957.7410967863934   |
+| D        | 1.8760610434119742  |
+| E        | 420.2652591839401   |
+| nu       | 0.495               |
+
+
 
 # Documentation
 For more details, visit the [Wiki](https://github.com/MrJSimon/hippoelasto/wiki).
