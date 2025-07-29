@@ -40,7 +40,7 @@ def initiate_font_settings():
 
 
 def plotStressStrainCurve(Xi, Yi, Xp, Yp,
-                          picture_name = 'output//predictionvsdata.png',
+                          picture_name = 'output//predictionvsdata.pdf',
                           fontsize_plot   = 16,
                           markersize_plot = 12,
                           labelsize_plot  = 15,
@@ -90,7 +90,7 @@ def plotStressStrainCurve(Xi, Yi, Xp, Yp,
 
 
 def plotTangenmodulus(Xp, Yp, Yt,
-                          picture_name = 'output//tangentmodulus.png',
+                          picture_name = 'output//tangentmodulus.pdf',
                           fontsize_plot   = 16,
                           markersize_plot = 12,
                           labelsize_plot  = 15,
@@ -142,7 +142,7 @@ def plotTangenmodulus(Xp, Yp, Yt,
     return
 
 def plotOptimizationHistory(Yi,Zi,param_names,
-                            picture_name = 'output//optimizationhistory.png',
+                            picture_name = 'output//optimizationhistory.pdf',
                             fontsize_plot   = 16,
                             markersize_plot = 10,
                             labelsize_plot  = 15,
