@@ -1,5 +1,6 @@
 # hippoelasto
 **hippoelasto** is a Python package for hyperelastic material characterization, calibration, and VUMAT generation for finite-element modeling in Abaqus.
+
 Built on SymPy, it uses symbolic differentiation of the user-defined strain-energy density to generate the corresponding stress tensor.
 The constitutive framework is formulated in terms of modified (isochoric) strain invariants, and you can supply your own strain-energy density functions with just a few lines of Python
 —perfect for rapidly prototyping and calibrating new material models.
