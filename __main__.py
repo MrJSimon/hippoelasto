@@ -20,6 +20,7 @@ from PythonFunctions.Optimization.optimization_routines import OptimizationSLSQP
 from PythonFunctions.PlottingFunctions.plotting_functions import plotStressStrainCurve
 from PythonFunctions.PlottingFunctions.plotting_functions import plotTangenmodulus
 from PythonFunctions.PlottingFunctions.plotting_functions import saveMaterialParameters
+from PythonFunctions.PlottingFunctions.plotting_functions import plotOptimizationHistory
 from PythonFunctions.TangentModulus.numerical_elastic_modulus import NumericalElasticModulus
 
 
@@ -119,6 +120,9 @@ plotStressStrainCurve(eps_n,sig_n,eps_p,sig_p)
 
 # Plot tangent modulus and save to output
 plotTangenmodulus(eps_p,sig_p, E_elastic)
+
+# Plot optimization history
+plotOptimizationHistory(obj_hist,param_hist,symbolic_param_list)
 
 # Save material-parameters
 saveMaterialParameters(symbolic_mater_list,material_output_list)
