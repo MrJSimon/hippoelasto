@@ -7,11 +7,12 @@
 ##############################################################################
 
 ## Import modulues
+import random
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.markers as mmarkers
 from matplotlib.backends.backend_pdf import PdfPages
-#import matplotlib.lines as mlines
 
 
 def initiate_font_settings():
@@ -39,7 +40,7 @@ def initiate_font_settings():
 
 
 def plotStressStrainCurve(Xi, Yi, Xp, Yp,
-                          picture_name = 'output//predictionvsdata.pdf',
+                          picture_name = 'output//predictionvsdata.png',
                           fontsize_plot   = 16,
                           markersize_plot = 12,
                           labelsize_plot  = 15,
@@ -89,7 +90,7 @@ def plotStressStrainCurve(Xi, Yi, Xp, Yp,
 
 
 def plotTangenmodulus(Xp, Yp, Yt,
-                          picture_name = 'output//tangentmodulus.pdf',
+                          picture_name = 'output//tangentmodulus.png',
                           fontsize_plot   = 16,
                           markersize_plot = 12,
                           labelsize_plot  = 15,
@@ -138,6 +139,75 @@ def plotTangenmodulus(Xp, Yp, Yt,
     print('Figure ' + picture_name + ' saved')
     
     plt.close()
+    return
+
+def plotOptimizationHistory(Yi,Zi,param_names,
+                            picture_name = 'output//optimizationhistory.png',
+                            fontsize_plot   = 16,
+                            markersize_plot = 10,
+                            labelsize_plot  = 15,
+                            linewidth_plot  = 5):
+
+    # Get a list of valid, unique markers
+    all_markers = [m for m in mmarkers.MarkerStyle.markers.keys()
+                   if m not in [None, ' ', 'None','none','']]
+    
+    # Draw unique markers: sample without replacement
+    if len(param_names) > len(all_markers):
+        raise ValueError("Not enough unique markers for the number of parameters.")
+    
+    # Get unique markers
+    unique_markers = random.sample(all_markers, len(param_names))
+    
+    ## Set number of iterations    
+    Xi = np.linspace(0,len(Yi),num=len(Yi),endpoint=True,dtype=int)
+
+    ## Initiate font settings
+    initiate_font_settings()
+
+    # Set x- and ylabels
+    xlabel  = r" Iterations"
+    ylabel1 = r" Objective Residual" 
+    ylabel2 = r" Parameter convergence"
+    
+    ## Create figure
+    fig,axes = plt.subplots(1,2,figsize = (12,7), tight_layout = True)
+    
+    ## Plot objective function versus iterations
+    axes[0].plot(Xi,Yi,linestyle='-',linewidth=linewidth_plot,color='black',alpha=1.0)
+    
+    for i in range(0,len(param_names)):
+        ## Set temporary values
+        Zt = Zi[:,i]
+        axes[1].plot(Xi,Zt,color='black',linestyle='-',
+                     marker=unique_markers[i],markersize=markersize_plot,
+                     label = param_names[i])
+    
+    ## Set x and y labels
+    axes[0].set_xlabel(xlabel,fontsize=fontsize_plot)
+    axes[1].set_xlabel(xlabel,fontsize=fontsize_plot) 
+    axes[0].set_ylabel(ylabel1,fontsize=fontsize_plot)
+    axes[1].set_ylabel(ylabel2,fontsize=fontsize_plot)
+
+    ## Set tick sizes
+    axes[0].tick_params(axis='both', which='major', labelsize=labelsize_plot)
+    axes[1].tick_params(axis='both', which='major', labelsize=labelsize_plot)
+
+    ## Set legend
+    axes[1].legend(fontsize = fontsize_plot,edgecolor='gray',facecolor='white',framealpha=1.0)
+    
+    ## Set grid
+    for ax in axes: 
+        ax.grid(color='gray', linestyle='-', linewidth=1)
+    
+    ## Save figure !!!
+    plt.savefig(picture_name, bbox_inches='tight')
+    
+    ## Print saving output
+    print('Figure ' + picture_name + ' saved')
+    
+    plt.close()
+    
     return
 
 
