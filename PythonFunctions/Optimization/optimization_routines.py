@@ -44,11 +44,22 @@ def OptimizationSLSQP(ObjectiveFunction, coefs, args, constraints = False,
                       method = 'SLSQP', 
                       options = {'ftol': 10e-30, 'disp': True, 'maxiter': 3000}):
 
+    # History of the parameter subject to optimization and 
+    # History of the objective function
+    param_history, objective_history = [], []
+
+    # Callback function to log values at each iteration
+    def callback(xk):
+        param_history.append(xk.copy())  # Store a copy of current parameters
+        fval = ObjectiveFunction(xk, *args)
+        objective_history.append(fval)
+    
     ## Call minimization/optimization 
     solution = minimize(ObjectiveFunction, coefs, args=args, 
                         constraints=constraints, 
-                        method='SLSQP', 
+                        method='SLSQP',
+                        callback=callback,
                         options=options)
     
     ## Return fitting parameters
-    return solution.x
+    return solution.x, objective_history, param_history
