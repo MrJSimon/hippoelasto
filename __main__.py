@@ -82,7 +82,7 @@ constraints = ({'type': 'ineq', 'fun': lambda params: EnergyConstraintTension(pa
 args = (PredictionStatementTension, P22_func, eps_n, sig_n, nu)
 
 # Conduct optimization and get best parameters
-model_coef_opt = OptimizationSLSQP(ObjectiveFunctionSSD, coefs, args, constraints = constraints)
+model_coef_opt, obj_hist, param_hist = OptimizationSLSQP(ObjectiveFunctionSSD, coefs, args, constraints = constraints)
 
 print('The optimization parameters are: ')
 print(model_coef_opt)
