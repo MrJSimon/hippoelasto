@@ -103,7 +103,7 @@ To see the full calibration pipeline and how to generate a VUMAT from your model
 
 | File Name                                       | Description                                |
 |-------------------------------------------------|--------------------------------------------|
-| VUMAT_2D_planestrain_incompressible_modified.f  | User Material subroutine                   |
+| VUMAT_2D_planestrain_modified.f  | User Material subroutine                   |
 | PredictionVsData.png                            | Fitted prediction                          |
 
 # Documentation
