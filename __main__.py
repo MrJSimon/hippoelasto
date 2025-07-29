@@ -18,7 +18,10 @@ from PythonFunctions.Optimization.optimization_routines import ObjectiveFunction
 from PythonFunctions.Optimization.optimization_routines import EnergyConstraintTension
 from PythonFunctions.Optimization.optimization_routines import OptimizationSLSQP
 from PythonFunctions.PlottingFunctions.plotting_functions import plotStressStrainCurve
+from PythonFunctions.PlottingFunctions.plotting_functions import plotTangenmodulus
+from PythonFunctions.PlottingFunctions.plotting_functions import saveMaterialParameters
 from PythonFunctions.TangentModulus.numerical_elastic_modulus import NumericalElasticModulus
+
 
 ## ------------------------------ DATA INPUT ------------------------------ ##
 
@@ -31,7 +34,7 @@ eps_n, sig_n = data[:,0], data[:,1]
 ## ----------------------- STRAIN ENERGY DEFINITION ----------------------- ##
 
 # Assume poisons ration
-nu = 0.1
+nu = 0.495
 
 # Define symbolic variables
 C10, C01, C20, D = sp.symbols('C10 C01 C20 D')
@@ -54,6 +57,8 @@ symbolic_param_list = [C10,C01,C20,D]
 symbolic_deriv_list = [sp.diff(W, I1b), sp.diff(W, I2b), sp.diff(W, J_sym)]
 symbolic_namin_list = ['dWdI1','dWdI2', 'dWdJ']
 symbolic_mater_list = [str(param) for param in symbolic_param_list] + ['E', 'nu']
+
+## ------------------------------ MAIN FUNCTION ---------------------------- ##
         
 # Get the stress function
 P22_total = FirstPiolaKirschoffStress(W,I1b,I2b,J_sym,lambda_11,lambda_22,lambda_33)
@@ -82,6 +87,15 @@ model_coef_opt = OptimizationSLSQP(ObjectiveFunctionSSD, coefs, args, constraint
 print('The optimization parameters are: ')
 print(model_coef_opt)
 
+# Compute elastic modulus, based on prediction statement
+E_elastic = NumericalElasticModulus(eps_n,
+                                    PredictionStatementTension, 
+                                    P22_func, model_coef_opt, nu)
+
+# Build material output list
+material_output_list = list(model_coef_opt) + [E_elastic, nu]
+
+
 ## --------------------------- GENERATE VUMAT ------------------------------ ##
 
 # % Generate VUMAT fortran file
@@ -92,7 +106,7 @@ GenerateVumatHyperelasticity(W,
                           template_name = 'VUMAT_2D_planestrain_template.f')
 
 
-## ------------------- PLOT AND SAVE FIGURE TO OUTPUT----------------------- ##
+## --------------------------- SAVE TO OUTPUT ------------------------------ ##
 
 # Make artifical X-range
 eps_p = np.linspace(np.min(eps_n)-np.min(eps_n)/10,np.max(eps_n)+np.min(eps_n)/10,num=50,endpoint = True)
@@ -103,41 +117,8 @@ sig_p = PredictionStatementTension(model_coef_opt, P22_func, eps_p, nu)
 # Plot stress strain curve and save to output
 plotStressStrainCurve(eps_n,sig_n,eps_p,sig_p)
 
-##
-tangent_modulus = np.gradient(sig_p, eps_p)
+# Plot tangent modulus and save to output
+plotTangenmodulus(eps_p,sig_p, E_elastic)
 
-import matplotlib.pyplot as plt
-
-plt.figure()
-plt.plot(eps_p,tangent_modulus)
-plt.show()
-
-# %%
-
-## Tangent modulus estimation
-
-# Add a small positive offset to avoid log10(0)
-eps_min = np.min(eps_n[np.nonzero(eps_n)])  # get smallest non-zero strain
-eps_max = np.max(eps_n)
-
-# Define log bounds safely
-Xlog1 = np.log10(eps_min * 0.1)
-Xlog2 = np.log10(eps_max * 1.1)
-
-# Make artifical X-range
-eps_p = np.logspace(Xlog1,Xlog2,num=500,endpoint = True)
-
-sig_p = PredictionStatementTension(model_coef_opt, P22_func, eps_p, nu)
-
-tangent_modulus = np.gradient(sig_p, eps_p)
-
-plt.figure()
-plt.plot(eps_p,tangent_modulus)
-plt.xlabel('eps_{nominal} [-]')
-plt.ylabel('tangent moduli [MPa]')
-plt.show()
-
-
-oink = NumericalElasticModulus(eps_n,PredictionStatementTension, P22_func, model_coef_opt, nu)
-
-print(oink)
+# Save material-parameters
+saveMaterialParameters(symbolic_mater_list,material_output_list)
